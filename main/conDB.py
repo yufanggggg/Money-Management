@@ -10,12 +10,11 @@ def connection(db):
                             user='root',
                             password='987654321',
                             database=db,
-                            #  cursorclass=pymysql.cursors.DictCursor
                             )   
     return connection
 
 # create table 'member'
-# mycursor = connection('Money Management').cursor()
+mycursor = connection('Money Management').cursor()
 # mycursor.execute('CREATE TABLE IF NOT EXISTS `sign-in-member`( \
 #             `member_account` VARCHAR(20) NOT NULL primary key, \
 #             `member_pwd` VARCHAR(20) NOT NULL \
@@ -32,5 +31,5 @@ def connection(db):
 # mycursor.execute('ALTER TABLE `record` ADD balance int(20)')
 # mycursor.execute('ALTER TABLE `record` CHANGE COLUMN money income int(20)')
 # mycursor.execute('ALTER TABLE `record` ADD COLUMN spent int(20) AFTER income ')
-print("create table successfully")
+print("connect DB successfully")
 
