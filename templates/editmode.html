@@ -132,7 +132,7 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="confirm.html">
+                <a class="nav-link" href="tables.html">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables</span></a>
             </li>
@@ -400,39 +400,70 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                                            
-                                                <tr>
-                                                    <td><input type="date" name="Date"></td>
-                                                    <td>
-                                                        <select name="Money_Class">
-                                                            <optgroup label="收入項目">
-                                                                <option>薪水</option>
-                                                                <option>獎金</option>
-                                                                <option>股息</option>
-                                                                <option>意外財</option>
-                                                                <option>其他收入</option>
-                                                            </optgroup>
-                                                            <optgroup label="支出項目">
-                                                                <option>交通</option>
-                                                                <option>飲食</option>
-                                                                <option>生活</option>
-                                                                <option>娛樂</option>
-                                                                <option>股票投資</option>
-                                                                <option>其他支出</option>
-                                                            </optgroup>
-                                                            </select>
-                                                    </td>
-                                                    <td><input type="number" name="Income"></td>
-                                                    <td><input type="number" name="Cost"></td>
-                                                    <td></td>
-                                                    <td><input type="submit" name="Balance" value="新增" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
-                                                        <!-- <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></button> -->
+                                            <tr>
+                                                <td><input type="date" name="Date"></td>
+                                                <td>
+                                                    <select name="Money_Class">
+                                                        <optgroup label="收入項目">
+                                                            <option>薪水</option>
+                                                            <option>獎金</option>
+                                                            <option>股息</option>
+                                                            <option>意外財</option>
+                                                            <option>其他收入</option>
+                                                        </optgroup>
+                                                        <optgroup label="支出項目">
+                                                            <option>交通</option>
+                                                            <option>飲食</option>
+                                                            <option>生活</option>
+                                                            <option>娛樂</option>
+                                                            <option>股票投資</option>
+                                                            <option>其他支出</option>
+                                                        </optgroup>
+                                                        </select>
+                                                </td>
+                                                <td><input type="number" name="Income"></td>
+                                                <td><input type="number" name="Cost"></td>
+                                                <td></td>
+                                                <td><input type="submit" name="Balance" value="新增" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
+                                                 
+                                            {% for record in range(num) %}
+                                            <tr>
+                                                <td>{{records[record][0]}}</td>
+                                                <td>{{records[record][1]}}</td>
+                                                <td>{{records[record][2]}}</td>
+                                                <td>{{records[record][3]}}</td>
+                                                <td>{{Balance}}</td>
+                                                <!-- <td><input type="submit" name="Balance" value="刪除" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <input type="submit" name="Balance" value="修改" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td> -->
                                                     
-                                                        
-                                                    
-                                                </tr>                                               
-                                                
-                                            
+                                            </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td><input type="date" name="edit_Date" value="{{records[-1][0]}}"></td>
+                                                <td>
+                                                    <select name="edit_Money_Class" aria-selected="{{records[-1][1]}}">
+                                                        <optgroup label="收入項目">
+                                                            <option>薪水</option>
+                                                            <option>獎金</option>
+                                                            <option>股息</option>
+                                                            <option>意外財</option>
+                                                            <option>其他收入</option>
+                                                        </optgroup>
+                                                        <optgroup label="支出項目">
+                                                            <option>交通</option>
+                                                            <option>飲食</option>
+                                                            <option>生活</option>
+                                                            <option>娛樂</option>
+                                                            <option>股票投資</option>
+                                                            <option>其他支出</option>
+                                                        </optgroup>
+                                                        </select>
+                                                </td>
+                                                <td><input type="number" name="edit_Income" value="{{records[-1][2]}}"></td>
+                                                <td><input type="number" name="edit_Cost" value="{{records[-1][3]}}"></td>
+                                                <td>{{records[-1][-1]}}</td>
+                                                <td><a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal">確認修改</a> 
+                                            </tr>
+                                 
                                         </tbody>
                                     </table>
                                 </form>
@@ -485,6 +516,25 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Edit Modal-->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">確認輸入正確？</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">送出後，將無法修改內容。確定要送出？</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">返回</button>
+                <a class="btn btn-primary" href="{{url_for('submit_update')}}">確認</a>
+            </div>
+        </div>
+    </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->

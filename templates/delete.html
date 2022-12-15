@@ -400,39 +400,43 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                                            
-                                                <tr>
-                                                    <td><input type="date" name="Date"></td>
-                                                    <td>
-                                                        <select name="Money_Class">
-                                                            <optgroup label="收入項目">
-                                                                <option>薪水</option>
-                                                                <option>獎金</option>
-                                                                <option>股息</option>
-                                                                <option>意外財</option>
-                                                                <option>其他收入</option>
-                                                            </optgroup>
-                                                            <optgroup label="支出項目">
-                                                                <option>交通</option>
-                                                                <option>飲食</option>
-                                                                <option>生活</option>
-                                                                <option>娛樂</option>
-                                                                <option>股票投資</option>
-                                                                <option>其他支出</option>
-                                                            </optgroup>
-                                                            </select>
-                                                    </td>
-                                                    <td><input type="number" name="Income"></td>
-                                                    <td><input type="number" name="Cost"></td>
-                                                    <td></td>
-                                                    <td><input type="submit" name="Balance" value="新增" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
-                                                        <!-- <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></button> -->
+                                            <tr>
+                                                <td><input type="date" name="Date"></td>
+                                                <td>
+                                                    <select name="Money_Class">
+                                                        <optgroup label="收入項目">
+                                                            <option>薪水</option>
+                                                            <option>獎金</option>
+                                                            <option>股息</option>
+                                                            <option>意外財</option>
+                                                            <option>其他收入</option>
+                                                        </optgroup>
+                                                        <optgroup label="支出項目">
+                                                            <option>交通</option>
+                                                            <option>飲食</option>
+                                                            <option>生活</option>
+                                                            <option>娛樂</option>
+                                                            <option>股票投資</option>
+                                                            <option>其他支出</option>
+                                                        </optgroup>
+                                                        </select>
+                                                </td>
+                                                <td><input type="number" name="Income"></td>
+                                                <td><input type="number" name="Cost"></td>
+                                                <td></td>
+                                                <td><input type="submit" name="Balance" value="新增" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
+                                                 
+                                            {% for record in range(num-1) %}
+                                            <tr>
+                                                <td>{{records[record][0]}}</td>
+                                                <td>{{records[record][1]}}</td>
+                                                <td>{{records[record][2]}}</td>
+                                                <td>{{records[record][3]}}</td>
+                                                <td>{{Balance}}</td>
+                                                <!-- <td><input type="submit" name="Balance" value="刪除" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <input type="submit" name="Balance" value="修改" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td> -->
                                                     
-                                                        
-                                                    
-                                                </tr>                                               
-                                                
-                                            
+                                            </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </form>
