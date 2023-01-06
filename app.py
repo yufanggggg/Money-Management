@@ -152,7 +152,7 @@ def record_create():
     )
 
 #刪除
-@app.route('/delete',methods = ['GET'])
+@app.route('/delete',methods = ['POST','GET'])
 def delete():
     b=request.form.to_dict()
 
@@ -180,104 +180,144 @@ def delete():
     delete_sql="delete FROM `money management`.record where `NO` = (SELECT * FROM (SELECT MAX(NO) FROM `money management`.record )AS A)"
     cursor.execute(delete_sql)
     conn.commit()
-    return render_template("delete.html",num=num,records=records,Balance=b['Balance'])
+    return render_template("record.html",num=num-1,records=records,Balance=b['Balance'])
 
 #至修改mode
-@app.route('/editmode',methods = ['GET'])
+@app.route('/editmode',methods = ['POST','GET'])
 def edit_mode():
-    b=request.form.to_dict()
     #查閱資料庫
     select_sql="select `Date`,`class`,`income`,`spent`,`balance` from `record`"
     cursor.execute(select_sql)
     records=cursor.fetchall()
     print(records)
     num=len(records)
+    # update_date=request.args.get('Date',records[-1][0])
+    # update_class=request.args.get('class',records[-1][1])
+    # update_income=request.args.get('income',records[-1][2])
+    # update_spent=request.args.get('spent',records[-1][3])
+
 
     # balance處理  
     if num>0:
         sum_balance=[]
         for i in range(num):
             sum_balance.append(records[i][-1])
-        b['Balance']=sum_balance[-1]+records[i][-2]-records[i][-3]
+        update_balance=sum_balance[-1]+records[-1][3]-records[-1][2]
     else:
-        b['Balance']=0
+        update_balance=0
 
     # 更新balance
     update_sql="update `record` set balance= %s "
-    cursor.execute(update_sql, b['Balance'])
+    cursor.execute(update_sql, update_balance)
     conn.commit()
     return render_template("editmode.html"
-    ,num=num,records=records,Balance=b['Balance']
+    ,num=num,records=records,Balance=update_balance
     )
 
-@app.route('/submit_update',methods = ['GET'])
+@app.route('/submit_update',methods = ['POST'])
 def submit_update():
-    b=request.form.to_dict()
-    print(b)
-    print(request.args.get('edit_Date'))
     #查閱資料庫
     select_sql="select `Date`,`class`,`income`,`spent`,`balance` from `record`"
     cursor.execute(select_sql)
     records=cursor.fetchall()
     print(records)
     num=len(records)
-        #日期
-    if request.args.get('edit_Date')!=records[-1][0]:
-        update_date_sql="update record set date = %s where `NO` = (SELECT * FROM (SELECT MAX(NO) FROM record )AS A)"
-        cursor.execute(update_date_sql,b['Date'])
+    print(num)
+    update_date=request.form.get('edit_Date',records[-1][0])
+    update_class=request.form.get('edit_Money_Class',records[-1][1])
+    update_income=request.form.get('edit_Income',0)
+    update_spent=request.form.get('edit_Cost',0)
+    a=update_income.split()
+    b=update_spent.split()
+    print(f'income:{a}')
+    print(f'spent:{b}')
+
+
+    # balance處理  
+    if num>1:
+        print('Aa')
+        if int(a[0])==0:
+            update_balance= records[-1][-1]-int(b[0])
+            print(records[-1][-1])
+            print(records[-1][2])
+            print(records[-1][3])
+            print(int(b[0]))
+            print('A')
+            print(f'update balance: {update_balance}')
+            update_sql="update `record` set balance= %s "
+            cursor.execute(update_sql, update_balance)
+            conn.commit()
+
+        elif int(b[0])==0:
+            update_balance= records[-1][-1]+int(a[0])
+            print(int(a[0]))
+            print('B')
+            print(f'update balance: {update_balance}')
+            update_sql="update `record` set balance= %s "
+            cursor.execute(update_sql, update_balance)
+            conn.commit()
+
+    else:
+        print('bb')
+        if a==[]:
+            update_balance=-int(b[0])
+            print('C')
+            print(f'update balance: {update_balance}')
+            update_sql="update `record` set balance= %s "
+            cursor.execute(update_sql, update_balance)
+            conn.commit()
+        if b==[]:
+            update_balance=int(a[0])
+            print('D')
+            print(f'update balance: {update_balance}')
+            update_sql="update `record` set balance= %s "
+            cursor.execute(update_sql, update_balance)
+            conn.commit()
+
+
+    #寫進資料庫
+    #日期
+    if update_date!=records[-1][0]:
+        update_date_sql="update record set date = %s where NO =(select * from (SELECT MAX(r.NO) from `record` r ) a)"
+        cursor.execute(update_date_sql,update_date)
         conn.commit()
+
     #金錢類別
-    if request.args.get('edit_Money_Class')!=records[-1][1]:
-        update_class_sql="update record set class = %s where `NO` = (SELECT * FROM (SELECT MAX(NO) FROM record )AS A)"
-        cursor.execute(update_class_sql.b['Money_Class'])
+    if update_class!=records[-1][1]:
+        update_class_sql="update record set class = %s where NO =(select * from (SELECT MAX(r.NO) from `record` r ) a)"
+        cursor.execute(update_class_sql,update_class)
         conn.commit()
     #金額
-    if request.args.get('edit_Income')!=records[-1][2]:
-        update_incomemoney_sql="update record set Income = %s where `NO` = (SELECT * FROM (SELECT MAX(NO) FROM record )AS A)"
-        cursor.execute(update_incomemoney_sql,b['Income'])
-        conn.commit()
-    if request.args.get('edit_Cost')!=records[-1][3]:
-        update_costmoney_sql="update record set cost = %s where `NO` = (SELECT * FROM (SELECT MAX(NO) FROM record )AS A)"
-        cursor.execute(update_costmoney_sql,b['Cost'])
-        conn.commit()
-    return render_template("record.html"
-    ,num=num,records=records
-    ,Date=b['edit_Date'],Money_Class=b['edit_Money_Class'],Income=int(b['edit_Income']),Cost=int(b['Cost']),Balance=b['edit_Balance']
-    )
+        #收入
+    if update_income!=records[-1][2]:
+        if a==[]:
+            update_incomemoney_sql="update record set income =%s where NO =(select * from (SELECT MAX(r.NO) from `record` r ) a)"
+            cursor.execute(update_incomemoney_sql,0)
+            conn.commit() 
+        else:
+            update_incomemoney_sql="update record set income = %s where NO =(select * from (SELECT MAX(r.NO) from `record` r ) a)"
+            cursor.execute(update_incomemoney_sql,int(a[0]))
+            conn.commit()
+        #花費
+    if update_spent!=records[-1][3]:
+        if b==[]:
+            update_costmoney_sql="update record set spent =%s where NO =(select * from (SELECT MAX(r.NO) from `record` r ) a)" 
+            cursor.execute(update_costmoney_sql,0)
+            conn.commit()
 
+        else:
+            update_costmoney_sql="update record set spent =%s where NO =(select * from (SELECT MAX(r.NO) from `record` r ) a)" 
+            cursor.execute(update_costmoney_sql,int(b[0]))
+            conn.commit()
 
-#    # balance處理  
-#     if num>0:
-#         sum_balance=[]
-#         for i in range(num):
-#             sum_balance.append(records[i][-1])
-#         b['Balance']=sum_balance[-1]+records[i][-2]-records[i][-3]
-#     else:
-#         b['Balance']=0
+    select_sql="select `Date`,`class`,`income`,`spent`,`balance` from `record`"
+    cursor.execute(select_sql)
+    records=cursor.fetchall()
+    print(records)
+    num=len(records)
+    
 
-#     # 更新balance
-#     update_sql="update `record` set balance= %s "
-#     cursor.execute(update_sql, b['Balance'])
-#     conn.commit()
-
-    # return render_template("record.html"
-    # ,num=num,records=records
-    # ,Balance=b['Balance']
-    # )
-
-#至修改送出
-
-# @app.route('/updatesubmit',methods = ['GET'])
-# def updatesubmit():
-
-#     #查閱資料庫
-#     select_sql="select `Date`,`class`,`income`,`spent`,`balance` from `record`"
-#     cursor.execute(select_sql)
-#     records=cursor.fetchall()
-#     num=len(records)
-#     #資料庫更新
-#     b=request.form.to_dict()
-#     print(b)
+    return render_template("record.html",num=num,records=records,Balance=records[-1][-1])
 
 if (__name__) == ('__main__'):
     app.run(debug=True) #啟動網站伺服器，可透過port參數設定阜號
