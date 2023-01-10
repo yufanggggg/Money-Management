@@ -5,6 +5,11 @@ from flask_wtf import Form
 from wtforms import *
 import pymysql
 import pymysql.cursors
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties as font
+
+font1 = font(fname="C:/Users/User/Downloads/text_props.py")
 #建立物件，表整個伺服器運作。也可以設定靜態檔案路徑處理(加入更多參數)
 conn=pymysql.connect(host='localhost',
                             user='root',
@@ -318,6 +323,36 @@ def submit_update():
     
 
     return render_template("record.html",num=num,records=records,Balance=records[-1][-1])
+# Pie Chart
+@app.route('/charts',methods = ['GET'])
+def pie_chart():
+    #查閱資料庫
+    select_sql="select `class`,sum(`income`) from `record` where `spent`= 0 group by class"
+    cursor.execute(select_sql)
+    records=cursor.fetchall()
+    print(records)
+    print(type(records))
+    num=len(records)
+    print(num)
+    data=[]
+    data_class=[]
+    for i in range(num):
+        data.append(records[i][1])
+        data_class.append(records[i][0])
+
+    print(data)
+    print(data_class)
+
+    matplotlib.rcParams['font.family'] = ['Source Han Sans TW', 'sans-serif']
+ 
+    plt.pie(data,
+        radius=1.5,
+        labels=data_class,
+        startangle=60,
+        textprops={'weight':'bold','size':16},
+        autopct='%.1f%%')
+    plt.show()
+    return render_template("charts.html")
 
 if (__name__) == ('__main__'):
     app.run(debug=True) #啟動網站伺服器，可透過port參數設定阜號
