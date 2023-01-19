@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>{{account}} - Tables</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">{{account}}</div>
             </a>
 
             <!-- Divider -->
@@ -124,15 +124,15 @@
             </li>
 
             <!-- Nav Item - Charts -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Charts</span></a>
-            </li>
+            </li> -->
 
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="record.html">
+                <a class="nav-link" href="/record">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables</span></a>
             </li>
@@ -328,7 +328,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{account}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -400,40 +400,57 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                                            
-                                                <tr>
-                                                    <td><input type="date" name="Date"></td>
-                                                    <td>
-                                                        <select name="Money_Class">
-                                                            <option selected>請選擇金錢來源/流向</option >
-                                                            <optgroup label="收入項目">
-                                                                <option>薪水</option>
-                                                                <option>獎金</option>
-                                                                <option>股息</option>
-                                                                <option>意外財</option>
-                                                                <option>其他收入</option>
-                                                            </optgroup>
-                                                            <optgroup label="支出項目">
-                                                                <option>交通</option>
-                                                                <option>飲食</option>
-                                                                <option>生活</option>
-                                                                <option>娛樂</option>
-                                                                <option>股票投資</option>
-                                                                <option>其他支出</option>
-                                                            </optgroup>
-                                                            </select>
-                                                    </td>
-                                                    <td><input type="number" name="Income"></td>
-                                                    <td><input type="number" name="Cost"></td>
-                                                    <td></td>
-                                                    <td><input type="submit" name="Balance" value="新增" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
-                                                        <!-- <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></button> -->
+                                            <tr>
+                                                <td><input type="date" name="Date"></td>
+                                                <td>
+                                                    <select name="Money_Class">
+                                                        <option selected>請選擇金錢來源/流向</option >
+                                                        <optgroup label="收入項目">
+                                                            <option>薪水</option>
+                                                            <option>獎金</option>
+                                                            <option>股息</option>
+                                                            <option>意外財</option>
+                                                            <option>其他收入</option>
+                                                        </optgroup>
+                                                        <optgroup label="支出項目">
+                                                            <option>交通</option>
+                                                            <option>飲食</option>
+                                                            <option>生活</option>
+                                                            <option>娛樂</option>
+                                                            <option>股票投資</option>
+                                                            <option>其他支出</option>
+                                                        </optgroup>
+                                                        </select>
+                                                </td>
+                                                <td><input type="number" name="Income"></td>
+                                                <td><input type="number" name="Cost"></td>
+                                                <td></td>
+                                                <td><input type="submit" name="Balance" value="新增" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
+                                                 
+                                            {% for record in range(num) %}
+                                            <tr>
+                                                <td>{{records[record][0]}}</td>
+                                                <td>{{records[record][1]}}</td>
+                                                <td>{{records[record][2]}}</td>
+                                                <td>{{records[record][3]}}</td>
+                                                <td>{{Balance}}</td>
+                                                <td id={{record}}><a href="/delete?id={{record}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">刪除</a> <a href="/editmode?id={{record}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">修改</a>
+                                                <!-- <td><input type="submit" name="Balance" value="刪除" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <input type="submit" name="Balance" value="修改" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td> -->
                                                     
-                                                        
-                                                    
-                                                </tr>                                               
-                                                
-                                            
+                                            </tr>
+                                            {% endfor %}
+
+                                            {% if b %}
+                                            <tr>
+                                                <td>{{Date}}</td>
+                                                <td>{{Money_Class}}</td>
+                                                <td>{{Income}}</td>
+                                                <td>{{Cost}}</td>
+                                                <td>{{Balance}}</td>
+                                                <td id={{num}}><a href="/delete?id={{num}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">刪除</a> <a href="/editmode?id={{num}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">修改</a>
+                                            {% endif %}   
+                                            </tr>
+                                 
                                         </tbody>
                                     </table>
                                 </form>
