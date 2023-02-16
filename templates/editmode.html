@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>{{account}}</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">{{account}}</div>
             </a>
 
             <!-- Divider -->
@@ -325,7 +325,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{account}}</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -372,7 +372,8 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-
+                                
+                                <form action="/submit_update?id={{a}}" method='post'> 
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
                                     <thead>
@@ -423,55 +424,54 @@
                                             <td><input type="submit" name="Balance" value="新增"
                                                     class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                             </td>
-
+                                        </tr>
                                             {% for record in range(num) if record !=a %}
-                                              
-                                            <tr>
-                                                <td>{{records[record][0]|default("none")}}</td>
-                                                <td>{{records[record][1]|default("")}}</td>
-                                                <td>{{records[record][2]|default(" ")}}</td>
-                                                <td>{{records[record][3]|default("none")}}</td>
-                                                <td>{{Balance|default("none")}}</td>
-                                                <!-- <td><input type="submit" name="Balance" value="刪除" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <input type="submit" name="Balance" value="修改" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td> -->
-                                            </tr>
+                                            
+                                        <tr>
+                                            <td>{{records[record][0]|default("none")}}</td>
+                                            <td>{{records[record][1]|default("")}}</td>
+                                            <td>{{records[record][2]|default(" ")}}</td>
+                                            <td>{{records[record][3]|default("none")}}</td>
+                                            <td>{{Balance|default("none")}}</td>
+                                            <!-- <td><input type="submit" name="Balance" value="刪除" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <input type="submit" name="Balance" value="修改" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td> -->
+                                        </tr>
+
                                             {% endfor %}
 
-                                        <form action="/submit_update?id={{a}}" method='post'>
-                                            <tr>
-                                                <td><input type="date" name="edit_Date" value="{{records[a][0]}}"></td>
-                                                <td>
-                                                    <select name="edit_Money_Class">
-                                                        <option selected>{{records[a][1]}}</option>
-                                                        <optgroup label="收入項目">
+                                        <tr>
+                                            <td><input type="date" name="edit_Date" value="{{records[a][0]}}"></td>
+                                            <td>
+                                                <select name="edit_Money_Class">
+                                                    <option selected>{{records[a][1]}}</option>
+                                                    <optgroup label="收入項目">
 
-                                                            <option>薪水</option>
-                                                            <option>獎金</option>
-                                                            <option>股息</option>
-                                                            <option>意外財</option>
-                                                            <option>其他收入</option>
-                                                        </optgroup>
-                                                        <optgroup label="支出項目">
-                                                            <option>交通</option>
-                                                            <option>飲食</option>
-                                                            <option>生活</option>
-                                                            <option>娛樂</option>
-                                                            <option>股票投資</option>
-                                                            <option>其他支出</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </td>
-                                                <td><input type="number" name="edit_Income" value="{{records[a][2]}}">
-                                                </td>
-                                                <td><input type="number" name="edit_Cost" value="{{records[a][3]}}">
-                                                </td>
-                                                <td>{{records[a][-1]}}</td>
-                                                <td ><input type="submit" value="確認修改" id={{a}}
-                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                                                </td>
-                                            </tr>
-                                        </form>
+                                                        <option>薪水</option>
+                                                        <option>獎金</option>
+                                                        <option>股息</option>
+                                                        <option>意外財</option>
+                                                        <option>其他收入</option>
+                                                    </optgroup>
+                                                    <optgroup label="支出項目">
+                                                        <option>交通</option>
+                                                        <option>飲食</option>
+                                                        <option>生活</option>
+                                                        <option>娛樂</option>
+                                                        <option>股票投資</option>
+                                                        <option>其他支出</option>
+                                                    </optgroup>
+                                                </select>
+                                            </td>
+                                            <td><input type="number" name="edit_Income" value="{{records[a][2]}}">
+                                            </td>
+                                            <td><input type="number" name="edit_Cost" value="{{records[a][3]}}">
+                                            </td>
+                                            <td>{{records[a][-1]}}</td>
+                                            <td name="id" value="{{a}}"><input type="submit" name='confirm' value=確認修改 class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"></td>
+                                        </tr>
+                                       
                                     </tbody>
                                 </table>
+                            </form>
                             </div>
                         </div>
 
